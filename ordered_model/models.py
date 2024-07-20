@@ -21,6 +21,8 @@ def get_lookup_value(obj, wrt_field, use_fkid=True):
         for depth, p in enumerate(path):
             f = mc._meta.get_field(p)
             if depth == leafindex and use_fkid and isinstance(f, ForeignKey):
+                print(p + "_id")
+                print("getattr a", getattr(obj, p + "_id"))
                 return getattr(obj, p + "_id")
             elif depth == leafindex:
                 return getattr(obj, p)
@@ -145,6 +147,7 @@ class OrderedModelBase(models.Model):
         d = {}
         for order_wrt_name in self.get_order_with_respect_to():
             d[order_wrt_name] = get_lookup_value(self, order_wrt_name, use_fkid=True)
+        print("d", d)
         return d
 
     def _get_related_objects(self):
@@ -208,7 +211,10 @@ class OrderedModelBase(models.Model):
             else:
                 qs = self._meta.default_manager.all()
         if wrt:
+            print("wrt", wrt)
             return qs.filter(**wrt)
+
+        print("self._wrt_map()", self._wrt_map())
         return qs.filter(**self._wrt_map())
 
     def previous(self):
