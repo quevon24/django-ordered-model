@@ -22,6 +22,8 @@ def get_lookup_value(obj, wrt_field, use_fkid=True):
             f = mc._meta.get_field(p)
             if depth == leafindex and use_fkid and isinstance(f, ForeignKey):
                 print(p + "_id")
+                print("obj", obj)
+                print("obj type", type(obj))
                 print("getattr a", getattr(obj, p + "_id"))
                 return getattr(obj, p + "_id")
             elif depth == leafindex:
